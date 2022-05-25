@@ -4,28 +4,41 @@ using UnityEngine;
 
 public class PlayerControlsNew : MonoBehaviour
 {
-    public float ratationSpeed = 0.1f;
+    public float rotationSpeed = 0.1f;
     public float movementSpeed = 1.0f;
+    public float minimumX;
+    public float minimumZ;
+    public float maximumX;
+    public float maximumZ;
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        PlayerMove();
+        Bounds();
+    }
 
-        Vector3 moveVector = new Vector3(0, 0, Input.GetAxis("Vertical")) * movementSpeed;
+    private void PlayerMove()
+    {
+        transform.Rotate(0, Input.GetAxis("Mouse X") * rotationSpeed, 0);
 
-        transform.Rotate(0, Input.GetAxis("Mouse X") * ratationSpeed, 0);
-        //transform.Translate();
-        transform.position += moveVector;
+        transform.Translate(Vector3.forward * movementSpeed * Input.GetAxis("Vertical"));
+        transform.Translate(Vector3.right * movementSpeed * Input.GetAxis("Horizontal"));
 
-        if (moveVector.magnitude > 0)
+    }
+
+    private void Bounds()
+    {
+        if (gameObject.transform.position.x <= minimumX || gameObject.transform.position.x >= maximumX
+            || gameObject.transform.position.z <= minimumZ || gameObject.transform.position.z >= maximumZ)
         {
-            transform.rotation = Quaternion.LookRotation(moveVector);
+
+            transform.position = new Vector3(0, 1, 0);
         }
     }
 }
